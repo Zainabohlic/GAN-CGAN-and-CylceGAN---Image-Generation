@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Conversion App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin-top: 200px;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="file"],
+        input[type="checkbox"] {
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        async function uploadImage(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const imageInput = document.getElementById('imageInput');
+            const isSketchInput = document.getElementById('isSketchInput');
+
+            formData.append('image', imageInput.files[0]);
+            formData.append('is_sketch', isSketchInput.checked); // Pass boolean value for is_sketch
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/generate', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    // Display the generated image
+                    const img = document.getElementById('outputImage');
+                    img.src = result.output_image_path; // Display the path to the generated image
+                    img.style.display = 'block';
+
+                    // Alert the user that the image was successfully converted and saved
+                    alert("Image successfully converted and saved in folder Uploads");
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>CycleGAN ImageToImage Conversion</h1>
+    <form id="imageForm" onsubmit="uploadImage(event)">
+        <label for="imageInput">Upload Image (Photo or Sketch):</label>
+        <input type="file" id="imageInput" accept="image/*" required>
+        <label>
+            <input type="checkbox" id="isSketchInput"> Is this a sketch?
+        </label>
+        <button type="submit">Convert Image</button>
+    </form>
+    <!-- <h2>Generated Output:</h2> -->
+    <img id="outputImage" src="" alt="Generated Output" style="display:none;">
+</body>
+</html>
