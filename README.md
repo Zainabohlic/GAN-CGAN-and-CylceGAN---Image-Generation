@@ -35,6 +35,7 @@ This repository contains implementations of Variational Autoencoders (VAE), Gene
 - Features:
   - Users can upload an image (or use live camera input).
   - The model will either convert the image into a sketch or generate a real face from a sketch, depending on the input.
+  - ![Generated Image from CGANs](ss.png)
 ## Datasets
 - [Person Face Sketches Dataset: Used for Conditional GAN and CycleGAN tasks](https://www.cs.toronto.edu/~kriz/cifar.html)
 - [CIFAR-10 Dataset](https://www.cs.toronto.edu/~kriz/cifar.html)
